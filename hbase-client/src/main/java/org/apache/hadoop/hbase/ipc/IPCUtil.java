@@ -32,6 +32,7 @@ import org.apache.hadoop.hbase.exceptions.ClientExceptionsUtil;
 import org.apache.hadoop.hbase.exceptions.ConnectionClosedException;
 import org.apache.hadoop.hbase.exceptions.ConnectionClosingException;
 import org.apache.hadoop.hbase.exceptions.TimeoutIOException;
+import org.apache.hadoop.hbase.shaded.protobuf.generated.TracingProtos;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.EnvironmentEdgeManager;
 import org.apache.hadoop.ipc.RemoteException;
@@ -112,6 +113,12 @@ class IPCUtil {
       builder.setTraceInfo(RPCTInfo.newBuilder().setParentId(call.span.getSpanId())
           .setTraceId(call.span.getTracerId()));
     }*/
+    /*if (call.span != null) {
+      TracingProtos.RPCTInfo.Builder builderRPCTInfo =
+          TracingProtos.RPCTInfo.newBuilder().setSpanContext(null);
+      builder.setTraceInfo(builderRPCTInfo);
+    }*/
+
     builder.setMethodName(call.md.getName());
     builder.setRequestParam(call.param != null);
     if (cellBlockMeta != null) {
