@@ -118,6 +118,7 @@ class IPCUtil {
           TracingProtos.RPCTInfo.newBuilder().setSpanContext(null);
       builder.setTraceInfo(builderRPCTInfo);
     }*/
+    io.opentracing.tag.Tags.
 
     builder.setMethodName(call.md.getName());
     builder.setRequestParam(call.param != null);

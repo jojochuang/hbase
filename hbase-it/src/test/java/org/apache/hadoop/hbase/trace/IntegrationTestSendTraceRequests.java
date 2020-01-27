@@ -34,7 +34,6 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.AbstractHBaseTool;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.htrace.core.Sampler;
 import org.apache.htrace.core.TraceScope;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
