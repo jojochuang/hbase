@@ -1119,7 +1119,7 @@ public class PerformanceEvaluation extends Configured implements Tool {
     protected final TestOptions opts;
 
     private final Status status;
-    private final Sampler traceSampler;
+    private final SamplerConfiguration traceSampler;
     private final SpanReceiverHost receiverHost;
 
     private String testName;

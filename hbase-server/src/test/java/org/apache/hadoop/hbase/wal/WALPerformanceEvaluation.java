@@ -25,6 +25,7 @@ import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
+import io.jaegertracing.Configuration.SamplerConfiguration;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,6 +60,7 @@ import org.apache.hadoop.hbase.regionserver.wal.SecureProtobufLogReader;
 import org.apache.hadoop.hbase.regionserver.wal.SecureProtobufLogWriter;
 import org.apache.hadoop.hbase.regionserver.wal.WALActionsListener;
 import org.apache.hadoop.hbase.trace.HBaseHTraceConfiguration;
+import org.apache.hadoop.hbase.trace.Sampler;
 import org.apache.hadoop.hbase.trace.SpanReceiverHost;
 import org.apache.hadoop.hbase.trace.TraceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -67,8 +69,6 @@ import org.apache.hadoop.hbase.util.Threads;
 import org.apache.hadoop.hbase.wal.WALProvider.Writer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.htrace.core.ProbabilitySampler;
-import org.apache.htrace.core.Sampler;
 import org.apache.htrace.core.TraceScope;
 import org.apache.htrace.core.Tracer;
 import org.apache.yetus.audience.InterfaceAudience;
@@ -309,7 +309,8 @@ public final class WALPerformanceEvaluation extends Configured implements Tool {
     LOG.info("FileSystem={}, rootDir={}", fs, rootRegionDir);
 
     SpanReceiverHost receiverHost = trace ? SpanReceiverHost.getInstance(getConf()) : null;
-    final Sampler sampler = trace ? Sampler.ALWAYS : Sampler.NEVER;
+    final SamplerConfiguration
+        sampler = trace ? Sampler.ALWAYS : Sampler.NEVER;
     TraceUtil.addSampler(sampler);
     TraceScope scope = TraceUtil.createTrace("WALPerfEval");
 

@@ -141,6 +141,11 @@
 
   <dependencies>
     <dependency>
+      <artifactId>jaeger-core</artifactId>
+      <groupId>io.jaegertracing</groupId>
+      <version>1.1.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.hbase</groupId>
       <artifactId>hbase-annotations</artifactId>
       <type>test-jar</type>
@@ -214,6 +219,8 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
     </dependency>
+
+    <!-- opentracing -->
     <dependency>
       <groupId>io.opentracing</groupId>
       <artifactId>opentracing-api</artifactId>
@@ -222,6 +229,22 @@
       <groupId>io.opentracing</groupId>
       <artifactId>opentracing-util</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.opentracing</groupId>
+      <artifactId>opentracing-mock</artifactId>
+    </dependency>
+      <dependency>
+        <groupId>io.jaegertracing</groupId>
+        <artifactId>jaeger-client</artifactId>
+        <version>1.1.0</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.jaegertracing</groupId>
+        <artifactId>jaeger-thrift</artifactId>
+        <version>1.1.0</version>
+        <scope>compile</scope>
+      </dependency>
   </dependencies>
 
   <profiles>

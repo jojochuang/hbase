@@ -17,13 +17,15 @@
  */
 package org.apache.hadoop.hbase.trace;
 
+import io.jaegertracing.Configuration.SamplerConfiguration;
+
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
+
 import org.apache.hadoop.conf.Configuration;
-import org.apache.htrace.core.HTraceConfiguration;
-import org.apache.htrace.core.Sampler;
-import org.apache.htrace.core.Span;
-import org.apache.htrace.core.SpanReceiver;
-import org.apache.htrace.core.TraceScope;
-import org.apache.htrace.core.Tracer;
+import org.apache.hbase.thirdparty.com.google.common.annotations.VisibleForTesting;
 import org.apache.yetus.audience.InterfaceAudience;
 
 /**
@@ -31,28 +33,43 @@ import org.apache.yetus.audience.InterfaceAudience;
  */
 @InterfaceAudience.Private
 public final class TraceUtil {
-  private static HTraceConfiguration conf;
+  private static io.jaegertracing.Configuration conf;
   private static Tracer tracer;
 
   private TraceUtil() {
   }
 
   public static void initTracer(Configuration c) {
-    if(c != null) {
+    /*if(c != null) {
       conf = new HBaseHTraceConfiguration(c);
     }
 
     if (tracer == null && conf != null) {
       tracer = new Tracer.Builder("Tracer").conf(conf).build();
+    }*/
+
+    if (!GlobalTracer.isRegistered()) {
+      conf = io.jaegertracing.Configuration.fromEnv("Tracer");
+      tracer = conf.getTracerBuilder().build();
+
+      GlobalTracer.register(tracer);
     }
+
+  }
+
+  @VisibleForTesting
+  public static void registerTracerForTest(Tracer tracer) {
+    TraceUtil.tracer = tracer;
+    GlobalTracer.register(tracer);
   }
 
   /**
    * Wrapper method to create new TraceScope with the given description
    * @return TraceScope or null when not tracing
    */
-  public static TraceScope createTrace(String description) {
-    return (tracer == null) ? null : tracer.newScope(description);
+  public static Scope createTrace(String description) {
+    return (tracer == null) ? null :
+        tracer.buildSpan(description).startActive(true);
   }
 
   /**
@@ -61,17 +78,18 @@ public final class TraceUtil {
    * @param span parent span
    * @return TraceScope or null when not tracing
    */
-  public static TraceScope createTrace(String description, Span span) {
+  public static Scope createTrace(String description, Span span) {
     if(span == null) return createTrace(description);
 
-    return (tracer == null) ? null : tracer.newScope(description, span.getSpanId());
+    return (tracer == null) ? null : tracer.buildSpan(description).
+        asChildOf(span).startActive(true);
   }
 
   /**
    * Wrapper method to add new sampler to the default tracer
    * @return true if added, false if it was already added
    */
-  public static boolean addSampler(Sampler sampler) {
+  public static boolean addSampler(SamplerConfiguration sampler) {
     if (sampler == null) {
       return false;
     }
@@ -83,9 +101,9 @@ public final class TraceUtil {
    * Wrapper method to add key-value pair to TraceInfo of actual span
    */
   public static void addKVAnnotation(String key, String value){
-    Span span = Tracer.getCurrentSpan();
+    Span span = tracer.activeSpan();
     if (span != null) {
-      span.addKVAnnotation(key, value);
+      span.setTag(key, value);
     }
   }
 
@@ -109,9 +127,9 @@ public final class TraceUtil {
    * Wrapper method to add timeline annotiation to current span with given message
    */
   public static void addTimelineAnnotation(String msg) {
-    Span span = Tracer.getCurrentSpan();
+    Span span = tracer.activeSpan();
     if (span != null) {
-      span.addTimelineAnnotation(msg);
+      span.log(msg);
     }
   }
 
