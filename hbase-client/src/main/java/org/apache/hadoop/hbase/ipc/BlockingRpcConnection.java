@@ -44,6 +44,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.security.sasl.SaslException;
 
+import io.opentracing.Scope;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
@@ -62,7 +63,6 @@ import org.apache.hadoop.ipc.RemoteException;
 import org.apache.hadoop.net.NetUtils;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.util.StringUtils;
-import org.apache.htrace.core.TraceScope;
 import org.apache.yetus.audience.InterfaceAudience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -588,7 +588,7 @@ class BlockingRpcConnection extends RpcConnection implements Runnable {
   }
 
   private void tracedWriteRequest(Call call) throws IOException {
-    try (TraceScope ignored = TraceUtil.createTrace("RpcClientImpl.tracedWriteRequest",
+    try (Scope ignored = TraceUtil.createTrace("RpcClientImpl.tracedWriteRequest",
           call.span)) {
       writeRequest(call);
     }

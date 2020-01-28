@@ -71,6 +71,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import io.opentracing.Scope;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -178,7 +180,6 @@ import org.apache.hadoop.hbase.wal.WALSplitUtil;
 import org.apache.hadoop.hbase.wal.WALSplitUtil.MutationReplay;
 import org.apache.hadoop.io.MultipleIOException;
 import org.apache.hadoop.util.StringUtils;
-import org.apache.htrace.core.TraceScope;
 import org.apache.yetus.audience.InterfaceAudience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -5928,7 +5929,7 @@ public class HRegion implements HeapSize, PropagatingConfigurationObserver, Regi
     RowLockImpl result = null;
 
     boolean success = false;
-    try (TraceScope scope = TraceUtil.createTrace("HRegion.getRowLock")) {
+    try (Scope scope = TraceUtil.createTrace("HRegion.getRowLock")) {
       TraceUtil.addTimelineAnnotation("Getting a " + (readLock?"readLock":"writeLock"));
       // Keep trying until we have a lock or error out.
       // TODO: do we need to add a time component here?
