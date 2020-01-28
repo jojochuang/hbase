@@ -27,6 +27,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.mock.MockSpan;
 import io.opentracing.mock.MockTracer;
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.hbase.HBaseClassTestRule;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.hadoop.hbase.StartMiniClusterOption;
@@ -64,9 +65,10 @@ public class TestOpenTracingHooks {
         .numMasters(2).numRegionServers(3).numDataNodes(3).build();
     TEST_UTIL.startMiniCluster(option);
 
-    tracer = new MockTracer();
-    TraceUtil.registerTracerForTest(tracer);
-    TraceUtil.addSampler(AlwaysSampler.INSTANCE);
+    //tracer = new MockTracer();
+    //TraceUtil.registerTracerForTest(tracer);
+    tracer = (MockTracer)TraceUtil.getTracer();
+    //TraceUtil.addSampler(AlwaysSampler.INSTANCE);
   }
 
   @AfterClass
