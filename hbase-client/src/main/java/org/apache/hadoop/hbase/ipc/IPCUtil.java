@@ -25,6 +25,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.nio.channels.ClosedChannelException;
 import java.util.concurrent.TimeoutException;
+
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.hbase.DoNotRetryIOException;
 import org.apache.hadoop.hbase.HBaseIOException;
 import org.apache.hadoop.hbase.HConstants;
@@ -33,9 +35,11 @@ import org.apache.hadoop.hbase.exceptions.ConnectionClosedException;
 import org.apache.hadoop.hbase.exceptions.ConnectionClosingException;
 import org.apache.hadoop.hbase.exceptions.TimeoutIOException;
 import org.apache.hadoop.hbase.shaded.protobuf.generated.TracingProtos;
+import org.apache.hadoop.hbase.trace.TraceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.EnvironmentEdgeManager;
 import org.apache.hadoop.ipc.RemoteException;
+import org.apache.hbase.thirdparty.com.google.protobuf.ByteString;
 import org.apache.yetus.audience.InterfaceAudience;
 
 import org.apache.hbase.thirdparty.com.google.common.base.Preconditions;
@@ -113,12 +117,13 @@ class IPCUtil {
       builder.setTraceInfo(RPCTInfo.newBuilder().setParentId(call.span.getSpanId())
           .setTraceId(call.span.getTracerId()));
     }*/
-    /*if (call.span != null) {
+    if (call.span != null) {
       TracingProtos.RPCTInfo.Builder builderRPCTInfo =
-          TracingProtos.RPCTInfo.newBuilder().setSpanContext(null);
+          TracingProtos.RPCTInfo.newBuilder().setSpanContext(
+              ByteString.copyFrom(
+                  TraceUtil.spanContextToByteArray(call.span.context())));
       builder.setTraceInfo(builderRPCTInfo);
-    }*/
-    io.opentracing.tag.Tags.
+    }
 
     builder.setMethodName(call.md.getName());
     builder.setRequestParam(call.param != null);

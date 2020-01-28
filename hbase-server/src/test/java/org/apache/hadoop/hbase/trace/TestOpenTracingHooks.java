@@ -45,11 +45,11 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.TestName;
 
 @Category({MiscTests.class, MediumTests.class})
-public class TestHTraceHooks {
+public class TestOpenTracingHooks {
 
   @ClassRule
   public static final HBaseClassTestRule CLASS_RULE =
-      HBaseClassTestRule.forClass(TestHTraceHooks.class);
+      HBaseClassTestRule.forClass(TestOpenTracingHooks.class);
 
   private static final byte[] FAMILY_BYTES = "family".getBytes();
   private static final HBaseTestingUtility TEST_UTIL = new HBaseTestingUtility();

@@ -21,6 +21,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.util.Optional;
 
+import io.opentracing.Scope;
 import org.apache.hadoop.hbase.CallDroppedException;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseInterfaceAudience;
@@ -33,7 +34,6 @@ import org.apache.hadoop.hbase.security.User;
 import org.apache.hbase.thirdparty.com.google.protobuf.Message;
 import org.apache.hadoop.hbase.util.Pair;
 import org.apache.hadoop.util.StringUtils;
-import org.apache.htrace.core.TraceScope;
 
 /**
  * The request processing logic, which is usually executed in thread pools provided by an
@@ -117,7 +117,7 @@ public class CallRunner {
       String error = null;
       Pair<Message, CellScanner> resultPair = null;
       RpcServer.CurCall.set(call);
-      TraceScope traceScope = null;
+      Scope traceScope = null;
       try {
         if (!this.rpcServer.isStarted()) {
           InetSocketAddress address = rpcServer.getListenerAddress();
