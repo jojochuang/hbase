@@ -80,6 +80,10 @@ public final class TraceUtil {
     GlobalTracer.register(tracer);
   }
 
+  public static Tracer getTracer() {
+    return tracer;
+  }
+
   /**
    * Wrapper method to create new Scope with the given description
    * @return Scope or null when not tracing
