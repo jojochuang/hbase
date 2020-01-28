@@ -22,6 +22,7 @@ import java.nio.channels.ClosedChannelException;
 import java.util.Optional;
 
 import io.opentracing.Scope;
+import io.opentracing.SpanContext;
 import org.apache.hadoop.hbase.CallDroppedException;
 import org.apache.hadoop.hbase.CellScanner;
 import org.apache.hadoop.hbase.HBaseInterfaceAudience;
@@ -128,7 +129,7 @@ public class CallRunner {
             call.getService() != null ? call.getService().getDescriptorForType().getName() : "";
         String methodName = (call.getMethod() != null) ? call.getMethod().getName() : "";
         String traceString = serviceName + "." + methodName;
-        traceScope = TraceUtil.createTrace(traceString);
+        traceScope = TraceUtil.createTrace(traceString, call.getSpanContext());
         // make the call
         resultPair = this.rpcServer.call(call, this.status);
       } catch (TimeoutIOException e){

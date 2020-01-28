@@ -106,6 +106,13 @@ public final class TraceUtil {
         asChildOf(span).startActive(true);
   }
 
+  public static Scope createTrace(String description, SpanContext spanContext) {
+    if(spanContext == null) return createTrace(description);
+
+    return (tracer == null) ? null : tracer.buildSpan(description).
+        asChildOf(spanContext).startActive(true);
+  }
+
   /**
    * Wrapper method to add new sampler to the default tracer
    * @return true if added, false if it was already added
