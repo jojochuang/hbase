@@ -112,17 +112,13 @@ class IPCUtil {
   static RequestHeader buildRequestHeader(Call call, CellBlockMeta cellBlockMeta) {
     RequestHeader.Builder builder = RequestHeader.newBuilder();
     builder.setCallId(call.id);
-    //TODO handle htrace API change, see HBASE-18895
-    /*if (call.span != null) {
-      builder.setTraceInfo(RPCTInfo.newBuilder().setParentId(call.span.getSpanId())
-          .setTraceId(call.span.getTracerId()));
-    }*/
     if (call.span != null) {
-      TracingProtos.RPCTInfo.Builder builderRPCTInfo =
-          TracingProtos.RPCTInfo.newBuilder().setSpanContext(
-              ByteString.copyFrom(
-                  TraceUtil.spanContextToByteArray(call.span.context())));
-      builder.setTraceInfo(builderRPCTInfo);
+      byte[] byteString = TraceUtil.spanContextToByteArray(call.span.context());
+      if (byteString != null) {
+        TracingProtos.RPCTInfo.Builder builderRPCTInfo =
+            TracingProtos.RPCTInfo.newBuilder().setSpanContext(ByteString.copyFrom(byteString));
+        builder.setTraceInfo(builderRPCTInfo);
+      }
     }
 
     builder.setMethodName(call.md.getName());
