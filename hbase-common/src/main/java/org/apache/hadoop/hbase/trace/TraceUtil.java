@@ -17,6 +17,7 @@
  */
 package org.apache.hadoop.hbase.trace;
 
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.htrace.core.HTraceConfiguration;
 import org.apache.htrace.core.Sampler;
@@ -24,6 +25,9 @@ import org.apache.htrace.core.Span;
 import org.apache.htrace.core.SpanReceiver;
 import org.apache.htrace.core.TraceScope;
 import org.apache.htrace.core.Tracer;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.yetus.audience.InterfaceAudience;
 
 /**
@@ -34,17 +38,32 @@ public final class TraceUtil {
   private static HTraceConfiguration conf;
   private static Tracer tracer;
 
+  private static final Logger LOG = LogManager.getLogger(TraceUtil.class.getName());
+
+
   private TraceUtil() {
   }
 
   public static void initTracer(Configuration c) {
-    if (c != null) {
+    /*if (c != null) {
       conf = new HBaseHTraceConfiguration(c);
     }
 
     if (tracer == null && conf != null) {
       tracer = new Tracer.Builder("Tracer").conf(conf).build();
+    }*/
+
+
+    LOG.setLevel(Level.DEBUG);
+    if (!GlobalTracer.isRegistered()) {
+      io.jaegertracing.Configuration conf = io.jaegertracing.Configuration.fromEnv("Tracer");
+      io.opentracing.Tracer tracer = conf.getTracerBuilder().build();
+
+      GlobalTracer.register(tracer);
+
     }
+    LOG.debug("tracer enabled.");
+    return;
   }
 
   /**
