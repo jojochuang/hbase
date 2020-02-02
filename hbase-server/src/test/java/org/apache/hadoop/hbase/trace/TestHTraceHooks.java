@@ -23,6 +23,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import io.opentracing.Scope;
 import org.apache.hadoop.hbase.HBaseClassTestRule;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.hadoop.hbase.StartMiniClusterOption;
@@ -88,6 +90,11 @@ public class TestHTraceHooks {
   public void testTraceCreateTable() throws Exception {
     Table table;
     Span createTableSpan;
+    try (Scope scope = TraceUtil.createOTrace("abc")) {
+      table = TEST_UTIL.createTable(TableName.valueOf(name.getMethodName()), FAMILY_BYTES);
+
+    }
+
     try (TraceScope scope = TraceUtil.createTrace("creating table")) {
       createTableSpan = scope.getSpan();
       table = TEST_UTIL.createTable(TableName.valueOf(name.getMethodName()), FAMILY_BYTES);

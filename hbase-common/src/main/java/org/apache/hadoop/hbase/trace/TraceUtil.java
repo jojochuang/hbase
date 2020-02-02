@@ -17,6 +17,7 @@
  */
 package org.apache.hadoop.hbase.trace;
 
+import io.opentracing.Scope;
 import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.htrace.core.HTraceConfiguration;
@@ -37,6 +38,8 @@ import org.apache.yetus.audience.InterfaceAudience;
 public final class TraceUtil {
   private static HTraceConfiguration conf;
   private static Tracer tracer;
+
+  private static io.opentracing.Tracer otTracer;
 
   private static final Logger LOG = LogManager.getLogger(TraceUtil.class.getName());
 
@@ -60,7 +63,7 @@ public final class TraceUtil {
       io.opentracing.Tracer tracer = conf.getTracerBuilder().build();
 
       GlobalTracer.register(tracer);
-
+      otTracer = tracer;
     }
     LOG.debug("tracer enabled.");
     return;
@@ -72,6 +75,10 @@ public final class TraceUtil {
    */
   public static TraceScope createTrace(String description) {
     return (tracer == null) ? null : tracer.newScope(description);
+  }
+
+  public static Scope createOTrace(String description) {
+    return (tracer == null) ? null : otTracer.buildSpan(description).startActive(true);
   }
 
   /**
