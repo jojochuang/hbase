@@ -229,10 +229,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.hbase</groupId>
+      <groupId>org.apache.hbase.thirdparty</groupId>
       <artifactId>hbase-jaeger</artifactId>
-      <!--<classifier>shaded</classifier>-->
-      <!--<scope>provided</scope>-->
+      <version>3.2.1-SNAPSHOT</version>
     </dependency>
 
     <!--

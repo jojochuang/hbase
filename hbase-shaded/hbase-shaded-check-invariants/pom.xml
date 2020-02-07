@@ -125,9 +125,10 @@
                     <!-- Do not shade OpenTracing to ensure tracing works -->
                     <exclude>io.opentracing:*</exclude>
                     <exclude>io.opentracing.contrib:*</exclude>
-                    <exclude>io.jaegertracing:jaeger-client</exclude>
+                    <!--<exclude>io.jaegertracing:jaeger-client</exclude>
                     <exclude>io.jaegertracing:jaeger-core</exclude>
-                    <exclude>io.jaegertracing:jaeger-tracerresolver</exclude>
+                    <exclude>io.jaegertracing:jaeger-tracerresolver</exclude>-->
+                    <exclude>org.apache.hbase.thirdparty:hbase-jaeger</exclude>
                     <!-- shade jaeger-thrift -->
 
                     <!-- Our public API requires Hadoop at runtime to work -->

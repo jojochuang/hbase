@@ -152,9 +152,10 @@
                                         <exclude>io.opentracing:*</exclude>
                                         <exclude>io.opentracing:*</exclude>
                                         <exclude>io.opentracing.contrib:*</exclude>
-                                        <exclude>io.jaegertracing:jaeger-client</exclude>
+                                        <!--<exclude>io.jaegertracing:jaeger-client</exclude>
                                         <exclude>io.jaegertracing:jaeger-core</exclude>
-                                        <exclude>io.jaegertracing:jaeger-tracerresolver</exclude>
+                                        <exclude>io.jaegertracing:jaeger-tracerresolver</exclude>-->
+                                        <exclude>org.apache.hbase.thirdparty:hbase-jaeger</exclude>
                                         <exclude>org.apache.yetus:*</exclude>
                                         <exclude>log4j:*</exclude>
                                         <exclude>commons-logging:*</exclude>
