@@ -113,10 +113,6 @@
                     <exclude>org.apache.htrace:*</exclude>
                     <!-- Do not shade OpenTracing to ensure tracing works -->
                     <exclude>io.opentracing:*</exclude>
-                    <exclude>io.opentracing.contrib:*</exclude>
-                    <!--<exclude>io.jaegertracing:jaeger-client</exclude>
-                    <exclude>io.jaegertracing:jaeger-core</exclude>
-                    <exclude>io.jaegertracing:jaeger-tracerresolver</exclude>-->
                     <exclude>org.apache.hbase.thirdparty:hbase-jaeger</exclude>
                     <!-- NB we don't exclude Hadoop from this check here, because the assumption is any needed classes
                          are contained in our artifacts.
