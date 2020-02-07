@@ -452,7 +452,7 @@
                                     </relocation>
 
                                   <!-- jaeger-thrift -->
-                                  <relocation>
+                                  <!--<relocation>
                                     <pattern>io.jaegertracing.thriftjava</pattern>
                                     <shadedPattern>${shaded.prefix}.io.jaegertracing.thriftjava</shadedPattern>
                                   </relocation>
@@ -494,6 +494,7 @@
                                     <pattern>org.jetbrains</pattern>
                                     <shadedPattern>${shaded.prefix}.io.jaegertracing.org.jetbrains</shadedPattern>
                                   </relocation>
+                                  -->
 
                                 </relocations>
                                 <transformers>
