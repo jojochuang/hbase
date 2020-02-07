@@ -1901,7 +1901,6 @@
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-jaeger</artifactId>
         <version>${project.version}</version>
-        <classifier>shaded</classifier>
     </dependency>
       <!-- General dependencies -->
       <dependency>
@@ -2367,6 +2366,7 @@
         <version>${opentracing.version}</version>
       </dependency>
 
+      <!--
       <dependency>
         <groupId>io.jaegertracing</groupId>
         <artifactId>jaeger-client</artifactId>
@@ -2377,6 +2377,7 @@
         <artifactId>jaeger-thrift</artifactId>
         <version>${jaegertracing.version}</version>
       </dependency>
+      -->
 
     </dependencies>
   </dependencyManagement>

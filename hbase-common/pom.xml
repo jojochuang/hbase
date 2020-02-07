@@ -231,7 +231,8 @@
     <dependency>
       <groupId>org.apache.hbase</groupId>
       <artifactId>hbase-jaeger</artifactId>
-      <classifier>shaded</classifier>
+      <!--<classifier>shaded</classifier>-->
+      <!--<scope>provided</scope>-->
     </dependency>
 
     <!--
