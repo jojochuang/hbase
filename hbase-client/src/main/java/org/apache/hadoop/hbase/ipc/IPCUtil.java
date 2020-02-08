@@ -119,6 +119,8 @@ class IPCUtil {
             TracingProtos.RPCTInfo.newBuilder().setSpanContext(ByteString.copyFrom(byteString));
         builder.setTraceInfo(builderRPCTInfo);
       }
+    } else {
+      TraceUtil.LOG.debug("the call has no span.");
     }
 
     builder.setMethodName(call.md.getName());

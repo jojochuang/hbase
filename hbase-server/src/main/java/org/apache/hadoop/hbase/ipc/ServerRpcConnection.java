@@ -688,6 +688,8 @@ abstract class ServerRpcConnection implements Closeable {
     if (header.hasTraceInfo() && header.getTraceInfo().hasSpanContext()) {
       TracingProtos.RPCTInfo rpctInfo = header.getTraceInfo();
       spanContext = TraceUtil.byteArrayToSpanContext(rpctInfo.getSpanContext().toByteArray());
+    } else {
+      TraceUtil.LOG.debug("missing trace span of this call" + header + param);
     }
     int timeout = 0;
     if (header.hasTimeout() && header.getTimeout() > 0) {

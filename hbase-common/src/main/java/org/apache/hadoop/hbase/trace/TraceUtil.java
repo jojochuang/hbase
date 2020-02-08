@@ -17,6 +17,8 @@
  */
 package org.apache.hadoop.hbase.trace;
 
+import io.jaegertracing.Configuration.SamplerConfiguration;
+import io.jaegertracing.internal.samplers.ConstSampler;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -26,18 +28,7 @@ import io.opentracing.propagation.TextMapExtractAdapter;
 import io.opentracing.propagation.TextMapInjectAdapter;
 import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.htrace.core.HTraceConfiguration;
-import org.apache.htrace.core.Sampler;
-import org.apache.htrace.core.Span;
-import org.apache.htrace.core.SpanReceiver;
-import org.apache.htrace.core.TraceScope;
-//import org.apache.htrace.core.Tracer;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import io.jaegertracing.Configuration.SamplerConfiguration;
 
-import org.apache.hadoop.tracing.TraceUtils;
 import org.apache.hbase.thirdparty.com.google.common.annotations.VisibleForTesting;
 import org.apache.yetus.audience.InterfaceAudience;
 import org.slf4j.Logger;
@@ -56,20 +47,15 @@ import java.util.Map;
  */
 @InterfaceAudience.Private
 public final class TraceUtil {
-  static final Logger LOG = LoggerFactory.getLogger(TraceUtils.class);
+  public static final Logger LOG = LoggerFactory.getLogger(TraceUtil.class);
 
   private static io.jaegertracing.Configuration conf;
   private static io.opentracing.Tracer tracer;
 
-  //private static io.opentracing.Tracer otTracer;
-
-  private static final Logger LOG = LogManager.getLogger(TraceUtil.class.getName());
-
-
   private TraceUtil() {
   }
 
-  public static void initTracer(Configuration c) {
+  public static void initTracer(Configuration c, String serviceName) {
     /*if(c != null) {
       conf = new HBaseHTraceConfiguration(c);
     }
@@ -79,8 +65,9 @@ public final class TraceUtil {
     }*/
 
     if (!GlobalTracer.isRegistered()) {
-      conf = io.jaegertracing.Configuration.fromEnv("Tracer");
-      tracer = conf.getTracerBuilder().build();
+      io.jaegertracing.spi.Sampler sampler = new ConstSampler(true);
+      conf = io.jaegertracing.Configuration.fromEnv(serviceName);
+      tracer = conf.getTracerBuilder().withSampler(sampler).build();
 
       GlobalTracer.register(tracer);
     }
@@ -101,7 +88,19 @@ public final class TraceUtil {
    * Wrapper method to create new Scope with the given description
    * @return Scope or null when not tracing
    */
+  public static Scope createRootTrace(String description) {
+    return (tracer == null) ? null :
+      tracer.buildSpan(description).startActive(true);
+  }
+
+  /**
+   * Wrapper method to create new Scope with the given description
+   * @return Scope or null when not tracing
+   */
   public static Scope createTrace(String description) {
+    if (tracer.activeSpan() == null) {
+      LOG.warn("no existing span. Please trace the code and find out where to initialize the span");
+    }
     return (tracer == null) ? null :
         tracer.buildSpan(description).startActive(true);
   }

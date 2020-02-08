@@ -56,6 +56,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import io.opentracing.Scope;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -516,7 +517,7 @@ public class HMaster extends HRegionServer implements MasterServices {
    */
   public HMaster(final Configuration conf) throws IOException {
     super(conf);
-    TraceUtil.initTracer(conf);
+    TraceUtil.initTracer(conf, "HMaster");
     try {
       if (conf.getBoolean(MAINTENANCE_MODE, false)) {
         LOG.info("Detected {}=true via configuration.", MAINTENANCE_MODE);
@@ -610,7 +611,7 @@ public class HMaster extends HRegionServer implements MasterServices {
     try {
       if (!conf.getBoolean("hbase.testing.nocluster", false)) {
         Threads.setDaemonThreadRunning(new Thread(() -> {
-          try {
+          try (Scope scope = TraceUtil.createRootTrace("Active Master startup")) {
             int infoPort = putUpJettyServer();
             startActiveMasterManager(infoPort);
           } catch (Throwable t) {

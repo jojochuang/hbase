@@ -611,8 +611,8 @@ public class HBaseTestingUtility extends HBaseZKTestingUtility {
     org.apache.log4j.Logger.getLogger(org.apache.hadoop.metrics2.impl.MetricsSystemImpl.class).
         setLevel(org.apache.log4j.Level.ERROR);
 
-    //TraceUtil.initTracer(conf);
-    TraceUtil.registerTracerForTest(new MockTracer());
+    TraceUtil.initTracer(conf, "mini dfs cluster");
+    //TraceUtil.registerTracerForTest(new MockTracer());
 
 
     this.dfsCluster = new MiniDFSCluster(0, this.conf, servers, true, true,
@@ -1083,7 +1083,7 @@ public class HBaseTestingUtility extends HBaseZKTestingUtility {
     }
 
     Configuration c = new Configuration(this.conf);
-    TraceUtil.initTracer(c);
+    TraceUtil.initTracer(c, "mini hbase cluster");
     this.hbaseCluster =
         new MiniHBaseCluster(c, option.getNumMasters(), option.getNumAlwaysStandByMasters(),
             option.getNumRegionServers(), option.getRsPorts(), option.getMasterClass(),

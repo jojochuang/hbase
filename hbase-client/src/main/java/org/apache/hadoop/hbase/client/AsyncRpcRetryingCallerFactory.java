@@ -26,6 +26,9 @@ import static org.apache.hbase.thirdparty.com.google.common.base.Preconditions.c
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+
+import io.opentracing.Span;
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
@@ -63,6 +66,8 @@ class AsyncRpcRetryingCallerFactory {
     protected int maxAttempts = retries2Attempts(conn.connConf.getMaxRetries());
 
     protected int startLogErrorsCnt = conn.connConf.getStartLogErrorsCnt();
+
+    protected Span span = GlobalTracer.get().activeSpan();
   }
 
   public class SingleRequestCallerBuilder<T> extends BuilderBase {
@@ -157,7 +162,7 @@ class AsyncRpcRetryingCallerFactory {
       preCheck();
       return new AsyncSingleRequestRpcRetryingCaller<>(retryTimer, conn, tableName, row, replicaId,
         locateType, callable, priority, pauseNs, pauseForCQTBENs, maxAttempts, operationTimeoutNs,
-        rpcTimeoutNs, startLogErrorsCnt);
+        rpcTimeoutNs, startLogErrorsCnt, span);
     }
 
     /**
@@ -438,7 +443,7 @@ class AsyncRpcRetryingCallerFactory {
     public AsyncMasterRequestRpcRetryingCaller<T> build() {
       preCheck();
       return new AsyncMasterRequestRpcRetryingCaller<T>(retryTimer, conn, callable, priority,
-        pauseNs, pauseForCQTBENs, maxAttempts, operationTimeoutNs, rpcTimeoutNs, startLogErrorsCnt);
+        pauseNs, pauseForCQTBENs, maxAttempts, operationTimeoutNs, rpcTimeoutNs, startLogErrorsCnt, span);
     }
 
     /**
@@ -515,7 +520,7 @@ class AsyncRpcRetryingCallerFactory {
     public AsyncAdminRequestRetryingCaller<T> build() {
       return new AsyncAdminRequestRetryingCaller<T>(retryTimer, conn, priority, pauseNs,
         pauseForCQTBENs, maxAttempts, operationTimeoutNs, rpcTimeoutNs, startLogErrorsCnt,
-        checkNotNull(serverName, "serverName is null"), checkNotNull(callable, "action is null"));
+        checkNotNull(serverName, "serverName is null"), checkNotNull(callable, "action is null"), span);
     }
 
     public CompletableFuture<T> call() {
@@ -581,7 +586,7 @@ class AsyncRpcRetryingCallerFactory {
     public AsyncServerRequestRpcRetryingCaller<T> build() {
       return new AsyncServerRequestRpcRetryingCaller<T>(retryTimer, conn, pauseNs, pauseForCQTBENs,
         maxAttempts, operationTimeoutNs, rpcTimeoutNs, startLogErrorsCnt,
-        checkNotNull(serverName, "serverName is null"), checkNotNull(callable, "action is null"));
+        checkNotNull(serverName, "serverName is null"), checkNotNull(callable, "action is null"), span);
     }
 
     public CompletableFuture<T> call() {
