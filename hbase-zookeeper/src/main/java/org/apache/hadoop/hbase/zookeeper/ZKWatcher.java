@@ -18,6 +18,9 @@
  */
 package org.apache.hadoop.hbase.zookeeper;
 
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.util.GlobalTracer;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,6 +87,7 @@ public class ZKWatcher implements Watcher, Abortable, Closeable {
   /* A pattern that matches a Kerberos name, borrowed from Hadoop's KerberosName */
   private static final Pattern NAME_PATTERN = Pattern.compile("([^/@]*)(/([^/@]*))?@([^/@]*)");
 
+  private Span span;
   /**
    * Instantiate a ZooKeeper connection and watcher.
    * @param identifier string that is passed to RecoverableZookeeper to be used as
@@ -492,7 +496,8 @@ public class ZKWatcher implements Watcher, Abortable, Closeable {
         "state=" + event.getState() + ", " +
         "path=" + event.getPath()));
 
-    switch(event.getType()) {
+    try (Scope scope = GlobalTracer.get().scopeManager().activate(span, false)) {
+      switch(event.getType()) {
 
       // If event type is NONE, this is a connection status change
       case None: {
@@ -531,6 +536,7 @@ public class ZKWatcher implements Watcher, Abortable, Closeable {
       }
       default:
         throw new IllegalStateException("Received event is not valid: " + event.getState());
+      }
     }
   }
 
@@ -666,5 +672,9 @@ public class ZKWatcher implements Watcher, Abortable, Closeable {
   @Override
   public boolean isAborted() {
     return this.abortable == null? this.aborted: this.abortable.isAborted();
+  }
+
+  public void setSpan(Span span) {
+    this.span = span;
   }
 }

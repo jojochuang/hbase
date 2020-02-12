@@ -20,8 +20,11 @@ package org.apache.hadoop.hbase.client;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.security.PrivilegedExceptionAction;
+
+import io.opentracing.Scope;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.security.User;
+import org.apache.hadoop.hbase.trace.TraceUtil;
 import org.apache.hadoop.hbase.util.FutureUtils;
 import org.apache.hadoop.hbase.util.ReflectionUtils;
 import org.apache.yetus.audience.InterfaceAudience;

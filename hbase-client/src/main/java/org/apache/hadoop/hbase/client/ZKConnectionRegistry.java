@@ -98,7 +98,9 @@ class ZKConnectionRegistry implements ConnectionRegistry {
 
   @Override
   public CompletableFuture<String> getClusterId() {
-    return getAndConvert(znodePaths.clusterIdZNode, ZKConnectionRegistry::getClusterId);
+    try (Scope scope = TraceUtil.createTrace("getClusterId")) {
+      return getAndConvert(znodePaths.clusterIdZNode, ZKConnectionRegistry::getClusterId);
+    }
   }
 
   @VisibleForTesting

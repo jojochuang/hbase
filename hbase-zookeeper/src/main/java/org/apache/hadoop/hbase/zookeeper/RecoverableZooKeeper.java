@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import io.opentracing.Scope;
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.hbase.trace.TraceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.RetryCounter;
@@ -163,6 +164,9 @@ public class RecoverableZooKeeper {
    * exist.
    */
   public void delete(String path, int version) throws InterruptedException, KeeperException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.delete")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       boolean isRetry = false; // False for first attempt, true for all retries.
@@ -208,6 +212,12 @@ public class RecoverableZooKeeper {
 
   private Stat exists(String path, Watcher watcher, Boolean watch)
           throws InterruptedException, KeeperException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
+    if (watcher != null) {
+      ((ZKWatcher) watcher).setSpan(GlobalTracer.get().activeSpan());
+    }
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.exists")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       while (true) {
@@ -265,6 +275,13 @@ public class RecoverableZooKeeper {
 
   private List<String> getChildren(String path, Watcher watcher, Boolean watch)
           throws InterruptedException, KeeperException {
+    if (GlobalTracer.get().activeSpan() == null) {
+      assert (false);
+    }
+
+    if (watcher != null) {
+      ((ZKWatcher) watcher).setSpan(GlobalTracer.get().activeSpan());
+    }
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.getChildren")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       while (true) {
@@ -314,6 +331,12 @@ public class RecoverableZooKeeper {
 
   private byte[] getData(String path, Watcher watcher, Boolean watch, Stat stat)
           throws InterruptedException, KeeperException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
+    if (watcher != null) {
+      ((ZKWatcher) watcher).setSpan(GlobalTracer.get().activeSpan());
+    }
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.getData")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       while (true) {
@@ -360,6 +383,9 @@ public class RecoverableZooKeeper {
    */
   public Stat setData(String path, byte[] data, int version)
     throws KeeperException, InterruptedException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.setData")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       byte[] newData = ZKMetadata.appendMetaData(id, data);
@@ -407,6 +433,9 @@ public class RecoverableZooKeeper {
    */
   public List<ACL> getAcl(String path, Stat stat)
     throws KeeperException, InterruptedException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.getAcl")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       while (true) {
@@ -436,6 +465,9 @@ public class RecoverableZooKeeper {
    */
   public Stat setAcl(String path, List<ACL> acls, int version)
     throws KeeperException, InterruptedException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.setAcl")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       while (true) {
@@ -477,6 +509,9 @@ public class RecoverableZooKeeper {
   public String create(String path, byte[] data, List<ACL> acl,
       CreateMode createMode)
     throws KeeperException, InterruptedException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.create")) {
       byte[] newData = ZKMetadata.appendMetaData(id, data);
       switch (createMode) {
@@ -606,6 +641,9 @@ public class RecoverableZooKeeper {
    */
   public List<OpResult> multi(Iterable<Op> ops)
     throws KeeperException, InterruptedException {
+    /*if (GlobalTracer.get().activeSpan() == null) {
+      assert(false);
+    }*/
     try (Scope scope = TraceUtil.createRootTrace("RecoverableZookeeper.multi")) {
       RetryCounter retryCounter = retryCounterFactory.create();
       Iterable<Op> multiOps = prepareZKMulti(ops);

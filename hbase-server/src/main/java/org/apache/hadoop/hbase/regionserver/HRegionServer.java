@@ -1488,7 +1488,7 @@ public class HRegionServer extends HasThread implements
    */
   protected void handleReportForDutyResponse(final RegionServerStartupResponse c)
   throws IOException {
-    try {
+    try (Scope scope = TraceUtil.createRootTrace("HRegionServer:handleReportForDutyResponse")) {
       boolean updateRootDir = false;
       for (NameStringPair e : c.getMapEntriesList()) {
         String key = e.getName();

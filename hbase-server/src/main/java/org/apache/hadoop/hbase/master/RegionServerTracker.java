@@ -26,6 +26,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import io.opentracing.contrib.concurrent.TracedExecutorService;
+import io.opentracing.util.GlobalTracer;
 import org.apache.hadoop.hbase.ServerMetrics;
 import org.apache.hadoop.hbase.ServerMetricsBuilder;
 import org.apache.hadoop.hbase.ServerName;
@@ -72,8 +75,9 @@ public class RegionServerTracker extends ZKListener {
     super(watcher);
     this.server = server;
     this.serverManager = serverManager;
-    this.executor = Executors.newSingleThreadExecutor(
-      new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RegionServerTracker-%d").build());
+    this.executor = new TracedExecutorService(Executors.newSingleThreadExecutor(
+      new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RegionServerTracker-%d").build()),
+      GlobalTracer.get(), false);
   }
 
   private Pair<ServerName, RegionServerInfo> getServerInfo(String name)
