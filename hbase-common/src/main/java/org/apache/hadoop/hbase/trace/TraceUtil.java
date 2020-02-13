@@ -50,7 +50,7 @@ public final class TraceUtil {
   public static final Logger LOG = LoggerFactory.getLogger(TraceUtil.class);
 
   private static io.jaegertracing.Configuration conf;
-  private static io.opentracing.Tracer tracer;
+  //private static io.opentracing.Tracer tracer;
 
   private TraceUtil() {
   }
@@ -67,7 +67,7 @@ public final class TraceUtil {
     if (!GlobalTracer.isRegistered()) {
       io.jaegertracing.spi.Sampler sampler = new ConstSampler(true);
       conf = io.jaegertracing.Configuration.fromEnv(serviceName);
-      tracer = conf.getTracerBuilder().withSampler(sampler).build();
+      io.opentracing.Tracer tracer = conf.getTracerBuilder().withSampler(sampler).build();
 
       GlobalTracer.register(tracer);
     }
@@ -76,12 +76,12 @@ public final class TraceUtil {
 
   @VisibleForTesting
   public static void registerTracerForTest(Tracer tracer) {
-    TraceUtil.tracer = tracer;
+    //TraceUtil.tracer = tracer;
     GlobalTracer.register(tracer);
   }
 
   public static Tracer getTracer() {
-    return tracer;
+    return GlobalTracer.get();
   }
 
   /**
@@ -89,8 +89,8 @@ public final class TraceUtil {
    * @return Scope or null when not tracing
    */
   public static Scope createRootTrace(String description) {
-    return (tracer == null) ? null :
-      tracer.buildSpan(description).startActive(true);
+    return (getTracer() == null) ? null :
+      getTracer().buildSpan(description).startActive(true);
   }
 
   /**
@@ -98,11 +98,11 @@ public final class TraceUtil {
    * @return Scope or null when not tracing
    */
   public static Scope createTrace(String description) {
-    if (tracer.activeSpan() == null) {
+    if (getTracer().activeSpan() == null) {
       LOG.warn("no existing span. Please trace the code and find out where to initialize the span");
     }
-    return (tracer == null) ? null :
-        tracer.buildSpan(description).startActive(true);
+    return (getTracer() == null) ? null :
+      getTracer().buildSpan(description).startActive(true);
   }
 
   /**
@@ -114,14 +114,14 @@ public final class TraceUtil {
   public static Scope createTrace(String description, Span span) {
     if(span == null) return createTrace(description);
 
-    return (tracer == null) ? null : tracer.buildSpan(description).
+    return (getTracer() == null) ? null : getTracer().buildSpan(description).
         asChildOf(span).startActive(true);
   }
 
   public static Scope createTrace(String description, SpanContext spanContext) {
     if(spanContext == null) return createTrace(description);
 
-    return (tracer == null) ? null : tracer.buildSpan(description).
+    return (getTracer() == null) ? null : getTracer().buildSpan(description).
         asChildOf(spanContext).startActive(true);
   }
 
@@ -135,7 +135,7 @@ public final class TraceUtil {
     }
 
     conf = conf.withSampler(sampler);
-    tracer = conf.getTracerBuilder().build();
+    io.opentracing.Tracer tracer = conf.getTracerBuilder().build();
 
     GlobalTracer.register(tracer);
     return true;
@@ -145,7 +145,7 @@ public final class TraceUtil {
    * Wrapper method to add key-value pair to TraceInfo of actual span
    */
   public static void addKVAnnotation(String key, String value){
-    Span span = tracer.activeSpan();
+    Span span = getTracer().activeSpan();
     if (span != null) {
       span.setTag(key, value);
     }
@@ -171,7 +171,7 @@ public final class TraceUtil {
    * Wrapper method to add timeline annotiation to current span with given message
    */
   public static void addTimelineAnnotation(String msg) {
-    Span span = tracer.activeSpan();
+    Span span = getTracer().activeSpan();
     if (span != null) {
       span.log(msg);
     }

@@ -124,6 +124,7 @@
                     <exclude>org.apache.htrace:*</exclude>
                     <!-- Do not shade OpenTracing to ensure tracing works -->
                     <exclude>io.opentracing:*</exclude>
+                    <exclude>io.opentracing.contrib:*</exclude>
                     <exclude>org.apache.hbase.thirdparty:hbase-jaeger</exclude>
                     <!-- Our public API requires Hadoop at runtime to work -->
                     <exclude>org.apache.hadoop:*</exclude>

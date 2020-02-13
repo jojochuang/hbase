@@ -275,9 +275,9 @@ public class RecoverableZooKeeper {
 
   private List<String> getChildren(String path, Watcher watcher, Boolean watch)
           throws InterruptedException, KeeperException {
-    if (GlobalTracer.get().activeSpan() == null) {
+    /*if (GlobalTracer.get().activeSpan() == null) {
       assert (false);
-    }
+    }*/
 
     if (watcher != null) {
       ((ZKWatcher) watcher).setSpan(GlobalTracer.get().activeSpan());
