@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:18.04 AS BASE_IMAGE
+FROM ubuntu:18.04 AS base_image
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
@@ -30,7 +30,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-FROM BASE_IMAGE AS MAVEN_DOWNLOAD_IMAGE
+FROM base_image AS MAVEN_DOWNLOAD_IMAGE
 ENV MAVEN_VERSION='3.6.3'
 ENV MAVEN_URL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
 ENV MAVEN_SHA512 'c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0'
@@ -38,14 +38,14 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/maven.tar.gz "${MAVEN_URL}" && \
   echo "${MAVEN_SHA512} */tmp/maven.tar.gz" | sha512sum -c -
 
-FROM BASE_IMAGE AS OPENJDK8_DOWNLOAD_IMAGE
+FROM base_image AS OPENJDK8_DOWNLOAD_IMAGE
 ENV OPENJDK8_URL 'https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u232-b09/OpenJDK8U-jdk_x64_linux_hotspot_8u232b09.tar.gz'
 ENV OPENJDK8_SHA256 '7b7884f2eb2ba2d47f4c0bf3bb1a2a95b73a3a7734bd47ebf9798483a7bcc423'
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/adoptopenjdk8.tar.gz "${OPENJDK8_URL}" && \
   echo "${OPENJDK8_SHA256} */tmp/adoptopenjdk8.tar.gz" | sha256sum -c -
 
-FROM BASE_IMAGE
+FROM base_image
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 #

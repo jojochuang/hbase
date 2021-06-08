@@ -21,7 +21,7 @@
 # tweaking unrelated aspects of the image.
 
 # start with a minimal image into which we can download remote tarballs
-FROM ubuntu:18.04 AS BASE_IMAGE
+FROM ubuntu:18.04 AS base_image
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
@@ -72,7 +72,7 @@ ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 # download sundry dependencies
 #
 
-FROM BASE_IMAGE AS SPOTBUGS_DOWNLOAD_IMAGE
+FROM base_image AS SPOTBUGS_DOWNLOAD_IMAGE
 ENV SPOTBUGS_VERSION '4.2.2'
 ENV SPOTBUGS_URL "https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/${SPOTBUGS_VERSION}/spotbugs-${SPOTBUGS_VERSION}.tgz"
 ENV SPOTBUGS_SHA256 '4967c72396e34b86b9458d0c34c5ed185770a009d357df8e63951ee2844f769f'
@@ -80,7 +80,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/spotbugs.tgz "${SPOTBUGS_URL}" && \
   echo "${SPOTBUGS_SHA256} */tmp/spotbugs.tgz" | sha256sum -c -
 
-FROM BASE_IMAGE AS HADOLINT_DOWNLOAD_IMAGE
+FROM base_image AS HADOLINT_DOWNLOAD_IMAGE
 ENV HADOLINT_VERSION '1.17.5'
 ENV HADOLINT_URL "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64"
 ENV HADOLINT_SHA256 '20dd38bc0602040f19268adc14c3d1aae11af27b463af43f3122076baf827a35'
@@ -88,7 +88,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/hadolint "${HADOLINT_URL}" && \
   echo "${HADOLINT_SHA256} */tmp/hadolint" | sha256sum -c -
 
-FROM BASE_IMAGE AS MAVEN_DOWNLOAD_IMAGE
+FROM base_image AS MAVEN_DOWNLOAD_IMAGE
 ENV MAVEN_VERSION='3.6.3'
 ENV MAVEN_URL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
 ENV MAVEN_SHA512 'c35a1803a6e70a126e80b2b3ae33eed961f83ed74d18fcd16909b2d44d7dada3203f1ffe726c17ef8dcca2dcaa9fca676987befeadc9b9f759967a8cb77181c0'
@@ -96,21 +96,21 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/maven.tar.gz "${MAVEN_URL}" && \
   echo "${MAVEN_SHA512} */tmp/maven.tar.gz" | sha512sum -c -
 
-FROM BASE_IMAGE AS OPENJDK7_DOWNLOAD_IMAGE
+FROM base_image AS OPENJDK7_DOWNLOAD_IMAGE
 ENV OPENJDK7_URL 'https://cdn.azul.com/zulu/bin/zulu7.36.0.5-ca-jdk7.0.252-linux_x64.tar.gz'
 ENV OPENJDK7_SHA256 'e0f34c242e6d456dac3e2c8a9eaeacfa8ea75c4dfc3e8818190bf0326e839d82'
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/zuluopenjdk7.tar.gz "${OPENJDK7_URL}" && \
   echo "${OPENJDK7_SHA256} */tmp/zuluopenjdk7.tar.gz" | sha256sum -c -
 
-FROM BASE_IMAGE AS OPENJDK8_DOWNLOAD_IMAGE
+FROM base_image AS OPENJDK8_DOWNLOAD_IMAGE
 ENV OPENJDK8_URL 'https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jdk_x64_linux_hotspot_8u282b08.tar.gz'
 ENV OPENJDK8_SHA256 'e6e6e0356649b9696fa5082cfcb0663d4bef159fc22d406e3a012e71fce83a5c'
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --location --fail --silent --show-error --output /tmp/adoptopenjdk8.tar.gz "${OPENJDK8_URL}" && \
   echo "${OPENJDK8_SHA256} */tmp/adoptopenjdk8.tar.gz" | sha256sum -c -
 
-FROM BASE_IMAGE AS OPENJDK11_DOWNLOAD_IMAGE
+FROM base_image AS OPENJDK11_DOWNLOAD_IMAGE
 ENV OPENJDK11_URL 'https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.10_9.tar.gz'
 ENV OPENJDK11_SHA256 'ae78aa45f84642545c01e8ef786dfd700d2226f8b12881c844d6a1f71789cb99'
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -121,7 +121,7 @@ RUN curl --location --fail --silent --show-error --output /tmp/adoptopenjdk11.ta
 # build the final image
 #
 
-FROM BASE_IMAGE
+FROM base_image
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3010
