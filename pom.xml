@@ -2626,6 +2626,23 @@
         <surefire.Xmx>2200m</surefire.Xmx>
       </properties>
     </profile>
+    <profile>
+      <id>build-with-jdk16</id>
+      <activation>
+        <jdk>[1.16,)</jdk>
+      </activation>
+      <properties>
+        <!-- TODO: replicate logic for windows support -->
+        <argLine>--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports java.security.jgss/sun.security.krb5=ALL-UNNAMED  ${hbase-surefire.argLine}</argLine>
+        <!-- We need a minimum HDFS version of 3.2.0 for HADOOP-12760 -->
+        <hadoop-three.version>3.2.0</hadoop-three.version>
+        <!--
+          Value to use for surefire when running jdk11.
+          TODO: replicate logic for windows
+        -->
+        <surefire.Xmx>2200m</surefire.Xmx>
+      </properties>
+    </profile>
     <!-- profile activated by the Jenkins patch testing job -->
     <profile>
       <id>jenkins.patch</id>
