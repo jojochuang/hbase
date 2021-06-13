@@ -230,6 +230,8 @@ public class ReflectionUtils {
   }
 
   public static Field getModifiersField() throws IllegalAccessException, NoSuchFieldException {
+    // this is copied from https://github.com/powermock/powermock/pull/1010/files to work around
+    // JDK 12+
     Field modifiersField = null;
     try {
       modifiersField = Field.class.getDeclaredField("modifiers");

@@ -2627,9 +2627,9 @@
       </properties>
     </profile>
     <profile>
-      <id>build-with-jdk16</id>
+      <id>build-with-jdk17</id>
       <activation>
-        <jdk>[1.16,)</jdk>
+        <jdk>[1.17,)</jdk>
       </activation>
       <properties>
         <!-- TODO: replicate logic for windows support -->
