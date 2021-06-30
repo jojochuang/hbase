@@ -196,14 +196,7 @@ public class TestFanOutOneBlockAsyncDFSOutput extends AsyncFSTestBase {
 
   @Test
   public void testConnectToDatanodeFailed()
-    throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-    InvocationTargetException, InterruptedException, NoSuchFieldException {
-    Field xceiverServerDaemonField = DataNode.class.getDeclaredField("dataXceiverServer");
-    xceiverServerDaemonField.setAccessible(true);
-    Class<?> xceiverServerClass =
-      Class.forName("org.apache.hadoop.hdfs.server.datanode.DataXceiverServer");
-    Method numPeersMethod = xceiverServerClass.getDeclaredMethod("getNumPeers");
-    numPeersMethod.setAccessible(true);
+    throws IOException {
     // make one datanode broken
     DataNodeProperties dnProp = CLUSTER.stopDataNode(0);
     Path f = new Path("/test");

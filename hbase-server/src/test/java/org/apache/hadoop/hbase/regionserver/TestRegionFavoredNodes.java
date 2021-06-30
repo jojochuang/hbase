@@ -63,17 +63,9 @@ public class TestRegionFavoredNodes {
   private static final int FAVORED_NODES_NUM = 3;
   private static final int REGION_SERVERS = 6;
   private static final int FLUSHES = 3;
-  private static Method createWithFavoredNode = null;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    try {
-      createWithFavoredNode = DistributedFileSystem.class.getDeclaredMethod("create", Path.class,
-        FsPermission.class, boolean.class, int.class, short.class, long.class,
-        Progressable.class, InetSocketAddress[].class);
-    } catch (NoSuchMethodException nm) {
-      return;
-    }
     TEST_UTIL.startMiniCluster(REGION_SERVERS);
     table = TEST_UTIL.createMultiRegionTable(TABLE_NAME, COLUMN_FAMILY);
     TEST_UTIL.waitUntilAllRegionsAssigned(TABLE_NAME);
@@ -85,15 +77,11 @@ public class TestRegionFavoredNodes {
     if (table != null) {
       table.close();
     }
-    if (createWithFavoredNode == null) {
-      return;
-    }
     TEST_UTIL.shutdownMiniCluster();
   }
 
   @Test
   public void testFavoredNodes() throws Exception {
-    Assume.assumeTrue(createWithFavoredNode != null);
     // Get the addresses of the datanodes in the cluster.
     InetSocketAddress[] nodes = new InetSocketAddress[REGION_SERVERS];
     List<DataNode> datanodes = TEST_UTIL.getDFSCluster().getDataNodes();
