@@ -75,8 +75,7 @@
             <phase>process-resources</phase>
             <configuration>
               <target>
-                <replace file="${project.build.outputDirectory}/hbase-default.xml"
-                  token="@@@VERSION@@@" value="${project.version}" />
+                <replace file="${project.build.outputDirectory}/hbase-default.xml" token="@@@VERSION@@@" value="${project.version}"/>
               </target>
             </configuration>
             <goals>
@@ -259,7 +258,7 @@
       <groupId>org.lz4</groupId>
       <artifactId>lz4-java</artifactId>
       <scope>compile</scope>
-      <version>1.7.1</version>
+      <version>1.8.0</version>
     </dependency>
   </dependencies>
 
@@ -388,7 +387,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore></ignore>
+                        <ignore/>
                       </action>
                     </pluginExecution>
                   </pluginExecutions>
