@@ -227,7 +227,7 @@ def get_review_board_id_if_present(issue_url, rb_link_title):
     links = json.loads(r.content)
     for link in links:
         if link["object"]["title"] == rb_link_title:
-            res = re.search("reviews.apache.org/r/([0-9]+)", link["object"]["url"])
+            res = re.search("reviews\.apache\.org/r/([0-9]+)", link["object"]["url"])
             return res.group(1)
     return None
 
