@@ -1715,6 +1715,8 @@
     </plugins>
   </build>
   <properties>
+    <sonar.organization>jojochuang</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <!-- override on command line to have generated LICENSE files include
          diagnostic info for verifying notice requirements -->
     <license.debug.print.included>false</license.debug.print.included>
