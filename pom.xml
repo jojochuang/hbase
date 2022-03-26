@@ -1680,7 +1680,7 @@
             <phase>site</phase>
             <configuration>
               <target name="rename file">
-                <move file="${project.reporting.outputDirectory}/book.pdf" tofile="${project.reporting.outputDirectory}/apache_hbase_reference_guide.pdf" />
+                <move file="${project.reporting.outputDirectory}/book.pdf" tofile="${project.reporting.outputDirectory}/apache_hbase_reference_guide.pdf"/>
               </target>
             </configuration>
             <goals>
@@ -1752,7 +1752,7 @@
     <avro.version>1.7.7</avro.version>
     <caffeine.version>2.8.1</caffeine.version>
     <commons-codec.version>1.13</commons-codec.version>
-    <commons-validator.version>1.6</commons-validator.version>
+    <commons-validator.version>1.7</commons-validator.version>
     <commons-io.version>2.11.0</commons-io.version>
     <commons-lang3.version>3.9</commons-lang3.version>
     <commons-math.version>3.6.1</commons-math.version>
@@ -1862,7 +1862,7 @@
     <surefire.testFailureIgnore>false</surefire.testFailureIgnore>
     <test.output.tofile>true</test.output.tofile>
     <surefire.timeout>900</surefire.timeout>
-    <test.exclude.pattern></test.exclude.pattern>
+    <test.exclude.pattern/>
     <!--
       Use -Dsurefire.Xmx=xxg to run tests with different JVM Xmx value.
       This value is managed separately for jdk11. See below.
@@ -3532,7 +3532,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.MiscTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3548,7 +3548,7 @@
         <surefire.firstPartGroups>
           org.apache.hadoop.hbase.testclassification.CoprocessorTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3563,7 +3563,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.ClientTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3578,7 +3578,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.MasterTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3593,7 +3593,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.MapredTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3608,7 +3608,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.MapReduceTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3624,7 +3624,7 @@
         <surefire.firstPartGroups>
           org.apache.hadoop.hbase.testclassification.RegionServerTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3640,7 +3640,7 @@
         <surefire.firstPartGroups>
           org.apache.hadoop.hbase.testclassification.VerySlowMapReduceTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
 
@@ -3657,7 +3657,7 @@
         <surefire.firstPartGroups>
           org.apache.hadoop.hbase.testclassification.VerySlowRegionServerTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
 
@@ -3673,7 +3673,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.FilterTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3688,7 +3688,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.IOTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3703,7 +3703,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.RestTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3718,7 +3718,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.RPCTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3734,7 +3734,7 @@
         <surefire.firstPartGroups>
           org.apache.hadoop.hbase.testclassification.ReplicationTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3749,7 +3749,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.SecurityTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3764,7 +3764,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.FlakeyTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3779,7 +3779,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.ZKTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
     <profile>
@@ -3794,7 +3794,7 @@
         <surefire.skipSecondPart>true</surefire.skipSecondPart>
         <surefire.firstPartGroups>org.apache.hadoop.hbase.testclassification.RSGroupTests
         </surefire.firstPartGroups>
-        <surefire.secondPartGroups></surefire.secondPartGroups>
+        <surefire.secondPartGroups/>
       </properties>
     </profile>
 
@@ -3951,7 +3951,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore></ignore>
+                        <ignore/>
                       </action>
                     </pluginExecution>
                     <pluginExecution>
@@ -3964,7 +3964,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore />
+                        <ignore/>
                       </action>
                     </pluginExecution>
                     <pluginExecution>
@@ -3978,7 +3978,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore />
+                        <ignore/>
                       </action>
                     </pluginExecution>
                       <pluginExecution>
