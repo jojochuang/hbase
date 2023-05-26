@@ -19,7 +19,7 @@
 #
 # Includes:
 # * Java 8
-FROM ubuntu:22.04
+FROM ubuntu:kinetic
 
 # Install extra needed repos and refresh.
 #
