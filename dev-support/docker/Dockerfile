@@ -21,7 +21,7 @@
 # tweaking unrelated aspects of the image.
 
 # start with a minimal image into which we can download remote tarballs
-FROM ubuntu:22.04 AS base_image
+FROM ubuntu:kinetic AS base_image
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
