@@ -19,7 +19,7 @@
 #
 # Includes:
 # * Java 8
-FROM ubuntu:22.04
+FROM ubuntu:22.10
 
 # Install extra needed repos and refresh.
 #
