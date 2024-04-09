@@ -207,7 +207,7 @@ public class AsyncProtobufLogWriter extends AbstractProtobufLogWriter
       throw ioe;
     } catch (ExecutionException | TimeoutException e) {
       Throwables.propagateIfPossible(e.getCause(), IOException.class);
-      throw new RuntimeException(e.getCause());
+      throw new RuntimeException(e);
     }
   }
 
